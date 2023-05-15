@@ -21,7 +21,7 @@ from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTENC
 
 from openpyxl import *
-from tkinter import *
+from tk import *
 
 from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTEN
