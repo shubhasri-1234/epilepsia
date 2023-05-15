@@ -21,7 +21,7 @@ from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTENC
 
 from openpyxl import *
-# from tkinter import *
+from tkinter import *
 
 from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTEN
@@ -334,5 +334,6 @@ def hello_world():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
+    app.debug=True
     conn.close()
     curr.close()
