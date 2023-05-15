@@ -21,7 +21,7 @@ from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTENC
 
 from openpyxl import *
-# from tkinter import *
+from tkinter import *
 
 from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTEN
@@ -218,7 +218,7 @@ def read_user_data():
         
    
         
-      
+    print("comes here")
     root = Tk()
     root.configure()
     root.title("Symptoms Form")
@@ -304,6 +304,7 @@ def hello_world():
         #if caseno exits in db 
 		#flag var
         flag,data=scan_db(caseno)
+        print(caseno)
         # print(flag)
         if flag==True:
             # print(caseno)
@@ -332,7 +333,6 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    
-    app.run(host='0.0.0.0', port=8080)
+    app.run()
     conn.close()
     curr.close()
