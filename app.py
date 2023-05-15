@@ -29,7 +29,10 @@ from pprint import pprint
 from flask import Flask, render_template
 from flask import request
 
-conn = psycopg2.connect( dbname='epilepsy',host='localhost',user='project',password='Password',port='5432')
+# postgres://xyz:XgD0wCoT3xceevDxhjsUGUf2No51seaS@dpg-chh461e7avjbbjtocq30-a.singapore-postgres.render.com/xyz_6o3t
+
+# conn = psycopg2.connect( dbname='epilepsy',host='localhost',user='project',password='Password',port='5432')
+conn = psycopg2.connect( dbname='xyz_6o3t',host='dpg-chh461e7avjbbjtocq30-a.singapore-postgres.render.com',user='xyz',password='XgD0wCoT3xceevDxhjsUGUf2No51seaS',port='5432')
 curr= conn.cursor()
 table='epilepsydata'
 
