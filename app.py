@@ -291,11 +291,6 @@ def hello_world():
         
         columns = list(doctor_ui)
         patientForm()
-        for column in columns:
-            for value in doctor_ui[column]:
-                if value == 'Select':
-                    return
-    
     
     return render_template('home.html',my_dict=dict())
     
