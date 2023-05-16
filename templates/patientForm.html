@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Data Form</title>
+    <style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+		}
+        
+	</style>
+</head>
+<body>
+    <table>
+        {% for key, value in formData.items() %}
+        <tr><select name="key">
+          {% for option in value %}
+            <option value='Select'>{{option}}</option>
+          {% endfor %}
+        </select></tr>
+        {% endfor %}
+    </table>
+    <div>{{result}}</div>
+</body>
+</html>
