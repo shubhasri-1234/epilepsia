@@ -22,7 +22,7 @@ from imblearn.over_sampling import SMOTENC
 
 from openpyxl import *
 from tk import *
-from tkinter import Tk
+from tkinter import tk
 
 
 from sklearn.linear_model import LogisticRegression
