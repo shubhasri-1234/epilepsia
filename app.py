@@ -181,7 +181,7 @@ def verdict(x_test, x_train, y_train):
 
     return diagnosis
 
-
+app = Flask(__name__)
 
 @app.route('/patientForm', methods =["GET", "POST"])
 def patientForm():
@@ -239,6 +239,7 @@ def patientForm():
                 options.add('Uncertain')
 
         formDataObject[column_name] = options
+    print(formDataObject)
 
 #   initialValues are the values selected by default on the dropdown, in case of re render after having filled the form partially
 #   the page needs to render again to show warning about selecting all fields along with older data the user had entered
@@ -249,7 +250,7 @@ def patientForm():
 doctor_ui = df.copy()
 doctor_ui=clean_data(doctor_ui)
 
-app = Flask(__name__)
+
 
 # @app.route('/retrive',)
 # def retrive():
