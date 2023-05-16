@@ -22,6 +22,8 @@ from imblearn.over_sampling import SMOTENC
 
 from openpyxl import *
 from tk import *
+from tkinter import Tk
+
 
 from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTEN
