@@ -21,7 +21,7 @@ from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTENC
 
 from openpyxl import *
-from tk import *
+from tkinter import *
 
 
 
@@ -183,20 +183,18 @@ def verdict(x_test, x_train, y_train):
 
 
 
-def read_user_data():
+@app.route('/patientForm', methods =["GET", "POST"])
+def patientForm():
     columns = list(doctor_ui)
 
-    def insert():
+    if request.method == "POST":
         row = []
 
-        for field_value in field_entry_boxes:
-            if type(field_value) == Entry:
-                row.append(field_value.get())
-            else:
-                row.append(field_value[1].get())
+        for field_name in columns:
+            row.append(request.form.get(field_name))
     
         if 'Select' in row:
-            heading.config( text = 'Please select a value for each dropdown' )
+            return render_template("patientForm.html", formData = formDataObject, initialValues = row, result = 'Please select a value for each dropdown')
         elif row[-1]=='Uncertain':
             #type casting patientage to float
 
@@ -210,73 +208,42 @@ def read_user_data():
             dui2 = x_train.iloc[-1:]
             x_train.drop(x_train.tail(1).index,inplace=True)
             
-            heading.config(text = verdict(dui2, x_train, y_train))
+            return render_template("patientForm.html", formData = formDataObject, initialValues = row, result = verdict(dui2, x_train, y_train))
             
         else:
             query = 'INSERT INTO %s("%s") VALUES (%s)' % (table, '","'.join(columns), ','.join(['%s'] * len(row)))
             curr.execute(query, row)
             conn.commit()
-            heading.config(text = 'Submitted')
-        
-   
-        
-    print("comes here")
-    root = Tk()
-    root.configure()
-    root.title("Symptoms Form")
-    root.geometry("1800x800")
+            return render_template("patientForm.html", formData = formDataObject, initialValues = row, result = 'Submitted')
 
-    heading = Label(root, text="Form")
+        
 
-    labels = []
-    field_entry_boxes = []
-    col = 0
-    row = 0
-    run = 0
-    for i, column in enumerate(columns):
-        labels.append(Label(root, text=column))
+    initialValues = []
+    for i in columns:
+        initialValues.append('Select')
+
+    formDataObject = {}
+    for column_name in columns:
         options = set()
 
-        clicked = StringVar()
-        clicked.set( "Select" )
-        
         is_number = 0
         
-        for value in doctor_ui[column]:
+        for value in doctor_ui[column_name]:
             if type(value) == type(0):
                 is_number = 1
                 break
             options.add(value)
 
         if is_number == 0:
-            if column=='caseno' or column=='patientage':
-                field_entry_boxes.append(Entry(root))
-                field_entry_boxes[i].grid(row=row, column=col+1, ipadx="100")
-            else:
-                if column=='final_diagnosis':
-                    options.add('Uncertain')
-                drop = OptionMenu( root , clicked , *options )
-                field_entry_boxes.append([drop, clicked])
-                field_entry_boxes[i][0].grid(row=row, column=col+1, ipadx="100")
-        else:
-            field_entry_boxes.append(Entry(root))
-            field_entry_boxes[i].grid(row=row, column=col+1, ipadx="100")
-        labels[i].grid(row=row, column=col)
-        if(col == 0):
-            col = 2
-        else:
-            col = 0
-        run += 1
-        run %= 2
-        if (run == 0):
-            row += 1
+            if column_name=='final_diagnosis':
+                options.add('Uncertain')
 
-    heading.grid(row=row+2, column=4)
-    submit = Button(root, text="Submit", command=insert)
-    submit.grid(row=row+2, column=1)
-    root.mainloop()
-    
-    return 
+        formDataObject[column_name] = options
+
+#   initialValues are the values selected by default on the dropdown, in case of re render after having filled the form partially
+#   the page needs to render again to show warning about selecting all fields along with older data the user had entered
+    return render_template("patientForm.html", formData = formDataObject, initialValues = initialValues, result = '')
+
 
 
 doctor_ui = df.copy()
@@ -304,7 +271,7 @@ def hello_world():
     if request.method == "POST":
         caseno = request.form.get("caseno")
         #if caseno exits in db 
-		#flag var
+		    #flag var
         flag,data=scan_db(caseno)
         print(caseno)
         # print(flag)
@@ -323,7 +290,7 @@ def hello_world():
 
         
         columns = list(doctor_ui)
-        read_user_data()
+        patientForm()
         for column in columns:
             for value in doctor_ui[column]:
                 if value == 'Select':
@@ -335,9 +302,7 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
     app.debug=True
     conn.close()
     curr.close()
-
