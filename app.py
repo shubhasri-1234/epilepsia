@@ -335,7 +335,13 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-    app.debug=True
+    import os
+
+    if os.environ.get('RENDER_ENV') == 'true':
+        app.run(host='0.0.0.0')
+    else:
+        app.run(host='127.0.0.1', port=8080, debug=True)
+
     conn.close()
     curr.close()
+
