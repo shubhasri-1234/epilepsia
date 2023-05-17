@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 import pandas as pd
 import numpy as np 
 import psycopg2
@@ -37,6 +37,7 @@ from flask import request
 conn = psycopg2.connect( dbname='xyz_6o3t',host='dpg-chh461e7avjbbjtocq30-a.singapore-postgres.render.com',user='xyz',password='XgD0wCoT3xceevDxhjsUGUf2No51seaS',port='5432')
 curr= conn.cursor()
 table='epilepsydata'
+formDataObject = {}
 
 df= pd.read_sql("select * from \"epilepsydata\"", conn)
 # print(df)
@@ -72,7 +73,6 @@ def clean_data(df):
     if type(age)==type('aa'):
         s=""
         s1=""
-        print(age)
         j=0
         for alpha in age:
           if alpha >='0' and alpha<='9':
@@ -95,12 +95,23 @@ def clean_data(df):
 
 
 def pre(df):
-
+    
     y = df.final_diagnosis
     x = df.drop('final_diagnosis',axis=1)
-
+    # print('dtypr for patientage')
+    # for col in list(x):
+    #     print(type(col))
+    
+    cat_cols = []
+    for column_name in x.columns:
+        if column_name!='caseno' and column_name!='patientage': 
+            cat_cols.append(True)
+        else:
+            cat_cols.append(False)
 
     sampler = SMOTEN(random_state=10)
+    print(x)
+    print(y)
     x_train, y_train = sampler.fit_resample(x, y)
     return x_train, y_train
 
@@ -126,7 +137,7 @@ def one_hot1(df):
                     else:
                         new_cols[col_name].append('No')
         
-    df.drop(old_cols, axis = 1,inplace=True)
+    df.drop(old_cols, axis = 1, inplace=True)
     for col_name in new_cols.keys():
         df[col_name] = new_cols[col_name]
     
@@ -185,21 +196,27 @@ app = Flask(__name__)
 
 @app.route('/patientForm', methods =["GET", "POST"])
 def patientForm():
+    global formDataObject
     columns = list(doctor_ui)
-
     if request.method == "POST":
         row = []
+        retrievrd_initial_values = {}
 
         for field_name in columns:
-            row.append(request.form.get(field_name))
+            retrieved_value = request.form.get(field_name)
+            row.append(retrieved_value)
+            retrievrd_initial_values[field_name] = retrieved_value
     
-        if 'Select' in row:
-            return render_template("patientForm.html", formData = formDataObject, initialValues = row, result = 'Please select a value for each dropdown')
+        if 'Select' in row or None in row:
+            return render_template("patientForm.html", formData = formDataObject, initialValues = retrievrd_initial_values, result = 'Please select a value for each dropdown')
         elif row[-1]=='Uncertain':
             #type casting patientage to float
 
             row[1]=float(row[1])
+
+            # doctor_ui.drop(['caseno', 'patientage'],axis=1, inplace=True)
             
+            # print(list(doctor_ui))
             x_train, y_train = pre(doctor_ui)
             x_train.loc[len(x_train.index)] = row[:-1]
             
@@ -218,37 +235,44 @@ def patientForm():
 
         
 
-    initialValues = []
-    for i in columns:
-        initialValues.append('Select')
+    initialValues = {}
 
-    formDataObject = {}
+    
     for column_name in columns:
         options = set()
 
         is_number = 0
-        
+        if column_name=='caseno' or column_name=='patientage':
+            formDataObject[column_name]=0
+            continue
+
         for value in doctor_ui[column_name]:
             if type(value) == type(0):
                 is_number = 1
                 break
-            options.add(value)
+            
+            if value!=None and value!='None':
+                options.add(value)
 
         if is_number == 0:
             if column_name=='final_diagnosis':
                 options.add('Uncertain')
+            formDataObject[column_name] = options
 
-        formDataObject[column_name] = options
-    print(formDataObject)
+        else:
+            formDataObject[column_name]=0
+        initialValues[column_name] = 'Select'
 
 #   initialValues are the values selected by default on the dropdown, in case of re render after having filled the form partially
 #   the page needs to render again to show warning about selecting all fields along with older data the user had entered
+    
     return render_template("patientForm.html", formData = formDataObject, initialValues = initialValues, result = '')
 
 
 
 doctor_ui = df.copy()
 doctor_ui=clean_data(doctor_ui)
+
 
 
 
@@ -274,7 +298,7 @@ def hello_world():
         #if caseno exits in db 
 		    #flag var
         flag,data=scan_db(caseno)
-        print(caseno)
+        # print(caseno)
         # print(flag)
         if flag==True:
             # print(caseno)
@@ -291,7 +315,7 @@ def hello_world():
 
         
         columns = list(doctor_ui)
-        patientForm()
+        return redirect(url_for('patientForm'))
     
     return render_template('home.html',my_dict=dict())
     

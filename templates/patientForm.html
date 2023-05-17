@@ -9,10 +9,11 @@
     {% for key, value in formData.items() %}
       <label for="{{ key }}">{{ key }}:</label>
       {% if value is iterable %}
-        <select id="{{ key }}" name="{{ key }}">
+        <select id="{{ key }}" name="{{ key }}" value="{{initialValues[key]}}">
           {% for item in value %}
             <option value="{{ item }}">{{ item }}</option>
           {% endfor %}
+          <option value="" disabled selected>Select</option>
         </select>
       {% else %}
         <input type="text" id="{{ key }}" name="{{ key }}" value="{{ value }}">
@@ -21,5 +22,6 @@
     {% endfor %}
     <input type="submit" value="Submit">
   </form>
+  <div>{{result}}</div>
 </body>
 </html>
