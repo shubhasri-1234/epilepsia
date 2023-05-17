@@ -2,9 +2,60 @@
 <html>
 <head>
   <title>Patient Information Form</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+    }
+  
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+  
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  
+    select,
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+  
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .result {
+      font-size: 24px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <h1>Patient Information</h1>
+  <div class="result">{{result}}</div>
   <form action="{{ url_for('patientForm') }}" method="post">
     {% for key, value in formData.items() %}
       <label for="{{ key }}">{{ key }}:</label>
@@ -22,6 +73,6 @@
     {% endfor %}
     <input type="submit" value="Submit">
   </form>
-  <div>{{result}}</div>
+
 </body>
 </html>
