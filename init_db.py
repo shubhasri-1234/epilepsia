@@ -2,58 +2,13 @@ import pandas as pd
 import numpy as np 
 import psycopg2
 import psycopg2.extras as extras
-
+import string 
+from app import clean_data
 conn = psycopg2.connect( dbname='epicdb',host='dpg-chihf7pmbg557hesh2c0-a.singapore-postgres.render.com',user='epicdb_user',password='WFNALRLUpMeL27VekaA9igBgrUETKoSV',port='5432')
 
 curr= conn.cursor()
 
-def clean_data(df):
-  
-  df.columns= df.columns.str.strip().str.lower()
-  
-  #remove a. 
-  alphabet = list(string.ascii_lowercase)
-  columns = list(df)
-  for col in columns:
-    for i, j in enumerate(df[col]):
-      if type(j)==type('aaaa'):
-        if len(j)<3:
-          continue
-        if j[0] in alphabet and j[1:3]==". ":
-          df[col][i]=j[3:]
-  #adding no to null value      
-  for i, j in enumerate(df['wandering_headbanging_observation']):
-      if df['wandering_headbanging_observation'][i]!='No' and df['wandering_headbanging_observation'][i]!='Yes':
-         df['wandering_headbanging_observation'][i]='No'
-            
-  #removing uncertain value
-  f = df.loc[df['final_diagnosis'] == 'Uncertain'].index
-  df.drop(f, inplace = True)
-  
-  df['patientage'] = df['patientage'].astype(float)
-  #convert age from months to years
-  for i,age in enumerate(df['patientage']):
-    if type(age)==type('aa'):
-        s=""
-        s1=""
-        j=0
-        for alpha in age:
-          if alpha >='0' and alpha<='9':
-            if(alpha=='0' and j!=0):
-                s+=alpha
-          elif alpha >='a' and alpha<='z':
-            s1+=alpha
-          j+=1
-        s1=s1.lower()
-          
-        if s1=='month' or s1=='months':
-          df['patientage'][i]=float(s)/12
-        else:
-           df['patientage'][i]=float(s)
-  
-  
 
-  return df
 def db_init():
     df = pd.read_excel('Copy_epileptic_seizures_Responses_New.xlsx')
     df = clean_data(df)
