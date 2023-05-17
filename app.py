@@ -34,7 +34,7 @@ from flask import request
 # postgres://xyz:XgD0wCoT3xceevDxhjsUGUf2No51seaS@dpg-chh461e7avjbbjtocq30-a.singapore-postgres.render.com/xyz_6o3t
 
 # conn = psycopg2.connect( dbname='epilepsy',host='localhost',user='project',password='Password',port='5432')
-conn = psycopg2.connect( dbname='xyz_6o3t',host='dpg-chh461e7avjbbjtocq30-a.singapore-postgres.render.com',user='xyz',password='XgD0wCoT3xceevDxhjsUGUf2No51seaS',port='5432')
+conn = psycopg2.connect( dbname='epicdb',host='dpg-chihf7pmbg557hesh2c0-a.singapore-postgres.render.com',user='epicdb_user',password='WFNALRLUpMeL27VekaA9igBgrUETKoSV',port='5432')
 curr= conn.cursor()
 table='epilepsydata'
 formDataObject = {}
