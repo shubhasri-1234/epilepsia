@@ -35,8 +35,10 @@ from flask import request
 
 # conn = psycopg2.connect( dbname='epilepsy',host='localhost',user='project',password='Password',port='5432')
 conn = psycopg2.connect( dbname='epilepcia_db',host='dpg-ci2id967avj2t34d1ng0-a.singapore-postgres.render.com',user='richa',password='w7xs8NWLki2a3AL1kdRL2ddcvsRgzp3Z',port='5432')
+# conn = psycopg2.connect(dbname="final_epsy_db",host="dpg-ci6kc5mnqql0ld921im0-a.singapore-postgres.render.com", user="epsy_team", password="U6LlTc6vv1t0mvh0od50UIH80TIampf9", port="5432")
 curr= conn.cursor()
 table='epilepsydata'
+table2 ="patientsdata"
 formDataObject = {}
 
 df= pd.read_sql("select * from \"epilepsydata\"", conn)
@@ -224,12 +226,18 @@ def patientForm():
             x_train, y_train = mapping(x_train, y_train)
             dui2 = x_train.iloc[-1:]
             x_train.drop(x_train.tail(1).index,inplace=True)
-            
+            query = 'INSERT INTO %s("%s") VALUES (%s)' % (table2, '","'.join(columns), ','.join(['%s'] * len(row)))
+            curr.execute(query, row)
+            conn.commit()
             return render_template("patientForm.html", formData = formDataObject, initialValues = row, result = verdict(dui2, x_train, y_train))
+        
             
         else:
             query = 'INSERT INTO %s("%s") VALUES (%s)' % (table, '","'.join(columns), ','.join(['%s'] * len(row)))
+            query2 = 'INSERT INTO %s("%s") VALUES (%s)' % (table2, '","'.join(columns), ','.join(['%s'] * len(row)))
+
             curr.execute(query, row)
+            curr.execute(query2, row)
             conn.commit()
             return render_template("patientForm.html", formData = formDataObject, initialValues = row, result = 'Submitted')
 
@@ -281,7 +289,7 @@ doctor_ui=clean_data(doctor_ui)
     
     
 def scan_db(caseno):
-    curr.execute("SELECT * FROM epilepsydata WHERE caseno=%s", (caseno,))
+    curr.execute("SELECT * FROM patientsdata WHERE caseno=%s", (caseno,))
     data=curr.fetchall()
     if(len(data)==0):
         return False,data 
@@ -302,7 +310,7 @@ def hello_world():
         # print(flag)
         if flag==True:
             # print(caseno)
-            curr.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'epilepsydata'")
+            curr.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'patientsdata'")
             columns=curr.fetchall()
             for i in range(len(columns)):
                 columns[i]=str(columns[i])
