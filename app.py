@@ -234,10 +234,10 @@ def patientForm():
             
         else:
             query = 'INSERT INTO %s("%s") VALUES (%s)' % (table, '","'.join(columns), ','.join(['%s'] * len(row)))
-            query2 = 'INSERT INTO %s("%s") VALUES (%s)' % (table2, '","'.join(columns), ','.join(['%s'] * len(row)))
+           
 
             curr.execute(query, row)
-            curr.execute(query2, row)
+            
             conn.commit()
             return render_template("patientForm.html", formData = formDataObject, initialValues = row, result = 'Submitted')
 
@@ -289,7 +289,7 @@ doctor_ui=clean_data(doctor_ui)
     
     
 def scan_db(caseno):
-    curr.execute("SELECT * FROM patientsdata WHERE caseno=%s", (caseno,))
+    curr.execute("SELECT * FROM epilepsydata WHERE caseno=%s", (caseno,))
     data=curr.fetchall()
     if(len(data)==0):
         return False,data 
@@ -310,7 +310,7 @@ def hello_world():
         # print(flag)
         if flag==True:
             # print(caseno)
-            curr.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'patientsdata'")
+            curr.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'epilepsydata'")
             columns=curr.fetchall()
             for i in range(len(columns)):
                 columns[i]=str(columns[i])
