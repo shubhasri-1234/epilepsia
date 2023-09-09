@@ -5,7 +5,8 @@ import psycopg2.extras as extras
 import string 
 # from app import clean_data
 # conn = psycopg2.connect(dbname="final_epsy_db",host="dpg-ci6kc5mnqql0ld921im0-a.singapore-postgres.render.com", user="epsy_team", password="U6LlTc6vv1t0mvh0od50UIH80TIampf9", port="5432")
-conn = psycopg2.connect( dbname='epilepcia_db',host='dpg-ci2id967avj2t34d1ng0-a.singapore-postgres.render.com',user='richa',password='w7xs8NWLki2a3AL1kdRL2ddcvsRgzp3Z',port='5432')
+# conn = psycopg2.connect( dbname='epilepcia_db',host='dpg-ci2id967avj2t34d1ng0-a.singapore-postgres.render.com',user='richa',password='w7xs8NWLki2a3AL1kdRL2ddcvsRgzp3Z',port='5432')
+conn =  psycopg2.connect(dbname ='sampledb', host ='sanket0510.ckzbugvgsbs6.us-east-1.rds.amazonaws.com', user='sanket', password= 'epic1234', port='5432')
 curr= conn.cursor()
 
 

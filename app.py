@@ -1,3 +1,6 @@
+from flask import Flask
+app = Flask(__name__)
+
 from flask import Flask, redirect, url_for
 import pandas as pd
 import numpy as np 
@@ -297,10 +300,8 @@ def scan_db(caseno):
         return True,data   
     
 
-
-@app.route('/',methods =["GET", "POST"])
-def hello_world():
-   
+@app.route('/xyz',methods=["GET", "POST"])
+def getData():
     if request.method == "POST":
         caseno = request.form.get("caseno")
         #if caseno exits in db 
@@ -318,19 +319,20 @@ def hello_world():
 
 
             mapping = dict(zip(list(columns), data[0]))
-            return render_template('home.html', my_dict=mapping)
+            return render_template('phase2home.html', my_dict=mapping)
             # return mapping
 
         
         columns = list(doctor_ui)
         return redirect(url_for('patientForm'))
-    
+    return render_template('phase2home.html',my_dict =dict())
+
+@app.route('/',methods =["GET", "POST"])
+def hello_world():
     return render_template('home.html',my_dict=dict())
     
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-    app.debug=True
-    conn.close()
-    curr.close()
+    app.run()
+    
