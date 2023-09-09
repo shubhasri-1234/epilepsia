@@ -135,7 +135,16 @@ def db_init():
             final_diagnosis TEXT
         );
     '''
-    
+    sql_table3 = '''
+        CREATE TABLE users (
+         institute_name TEXT,
+         doctor_name TEXT,
+         email TEXT,
+         password TEXT,
+         confirm_password TEXT,
+         user_id TEXT
+        )
+         '''
     # Execute the CREATE TABLE queries
     curr.execute(sql_table1)
     curr.execute(sql_table2)
@@ -147,7 +156,7 @@ def db_init():
     # SQL queries to insert data
     table1 = "epilepsydata"
     table2 = "patientsData"
-
+   
     query1 = "INSERT INTO %s(%s) VALUES %%s" % (table1, cols)
     query2 = "INSERT INTO %s(%s) VALUES %%s" % (table2, cols)
     

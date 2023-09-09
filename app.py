@@ -20,6 +20,7 @@ import seaborn as sns
 warnings.filterwarnings('ignore')
 import string 
 import math
+import uuid
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTENC
 
@@ -326,6 +327,31 @@ def getData():
         columns = list(doctor_ui)
         return redirect(url_for('patientForm'))
     return render_template('phase2home.html',my_dict =dict())
+
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        institute_name = request.form['institute_name']
+        doctor_name = request.form['doctor_name']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        user_id = uuid.uuid4()
+        # Insert the user data into the database
+        curr.execute(
+            "INSERT INTO users (institute_name, doctor_name, email, password, confirm_password, user_id) VALUES (?, ?, ?, ?, ?)",
+            (institute_name, doctor_name, email, password, confirm_password, user_id)
+        )
+        conn.commit()
+        
+        # Redirect to a success page or login page
+        return redirect(url_for('/'))
+
+    return render_template('registration_form.html')  # Render the HTML registration form template
+
+    
 
 @app.route('/',methods =["GET", "POST"])
 def hello_world():
