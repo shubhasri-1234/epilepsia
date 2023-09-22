@@ -301,7 +301,7 @@ def scan_db(caseno):
         return True,data   
     
 
-@app.route('/xyz',methods=["GET", "POST"])
+@app.route('/',methods=["GET", "POST"])
 def getData():
     if request.method == "POST":
         caseno = request.form.get("caseno")
@@ -354,9 +354,9 @@ def register():
 
     
 
-@app.route('/',methods =["GET", "POST"])
-def hello_world():
-    return render_template('home.html',my_dict=dict())
+# @app.route('/',methods =["GET", "POST"])
+# def hello_world():
+#     return render_template('home.html',my_dict=dict())
     
 
 
