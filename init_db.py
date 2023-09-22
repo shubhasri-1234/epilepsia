@@ -144,10 +144,11 @@ def db_init():
          confirm_password TEXT,
          user_id TEXT
         )
-         '''
+    '''
     # Execute the CREATE TABLE queries
     curr.execute(sql_table1)
     curr.execute(sql_table2)
+
     
     # Prepare the data for insertion
     tuples = [tuple(x) for x in df.to_numpy()]
@@ -163,7 +164,6 @@ def db_init():
     try:
         extras.execute_values(curr, query1, tuples)
         extras.execute_values(curr, query2, tuples)
-
         conn.commit()
         
     except (Exception, psycopg2.DatabaseError) as error:

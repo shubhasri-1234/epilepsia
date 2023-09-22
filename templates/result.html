@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: lightblue;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .body-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px;
+        }
+
+        .body-wrap1 {
+            text-align: center;
+            margin: 20px;
+        }
+
+       /* Style the label for CaseNo */
+.body-wrap1 label {
+    font-size: 18px;
+    display: block; /* Display the label as a block element */
+    margin-bottom: 10px; /* Add margin at the bottom to create space between label and input */
+}
+
+/* Style the input box for CaseNo */
+.body-wrap1 input[type="text"] {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 150px;
+    margin-bottom: 10px; /* Add margin at the bottom to create space between input and button */
+}
+
+/* Style the submit button */
+.body-wrap1 input[type="submit"] {
+    padding: 8px;
+    font-size: 16px;
+    background-color:white;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.body-wrap1 input[type="submit"]:hover{
+    background-color:grey;
+}
+
+
+        .right-column {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: lightblue;
+            color: black;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="body-wrap1">
+        <form action="{{ url_for("getData")}}" method="post">
+            <label for="caseno">Enter Case Number</label>
+            <input type="text" id="caseno" name="caseno">
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="body-wrap">
+        <div class="right-column">
+            <table>
+                <!-- Display your results here -->
+                <tr>
+                    <th>Symptoms</th>
+                    <th>Patient Exhibit</th>
+                </tr>
+                <!-- Loop through the data and display it -->
+                {% for key, value in my_dict.items() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

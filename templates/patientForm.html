@@ -4,16 +4,18 @@
   <title>Patient Information Form</title>
   <style>
     body {
-      background-color: #f2f2f2;
+      background-color: lightblue;
+      font-family: Arial, sans-serif;
     }
   
     h1 {
       color: #333;
       text-align: center;
+      margin-top: 20px;
     }
   
     form {
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 20px;
       background-color: #fff;
@@ -31,7 +33,7 @@
     input[type="text"] {
       width: 100%;
       padding: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 5px;
       box-sizing: border-box;
@@ -40,8 +42,8 @@
     input[type="submit"] {
       width: 100%;
       padding: 10px;
-      background-color: #333;
-      color: #fff;
+      background-color: lightblue;
+      color: black;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -50,6 +52,28 @@
     .result {
       font-size: 24px;
       text-align: center;
+      margin-top: 20px;
+    }
+    
+    /* Add some spacing for readability */
+    label, input[type="text"], select {
+      margin-right: 0;
+    }
+    
+    /* Style the form labels more distinctly */
+    label {
+      font-size: 16px;
+      color: #555;
+    }
+    
+    /* Style the select element */
+    select {
+      background-color: #f9f9f9;
+    }
+    
+    /* Add hover effect for submit button */
+    input[type="submit"]:hover {
+      background-color: #555;
     }
   </style>
 </head>
@@ -69,10 +93,9 @@
       {% else %}
         <input type="text" id="{{ key }}" name="{{ key }}" value="{{ value }}">
       {% endif %}
-      <br><br>
+      <br>
     {% endfor %}
     <input type="submit" value="Submit">
   </form>
-
 </body>
 </html>

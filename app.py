@@ -320,12 +320,13 @@ def getData():
 
 
             mapping = dict(zip(list(columns), data[0]))
-            return render_template('phase2home.html', my_dict=mapping)
+            return render_template('result.html', my_dict=mapping)
             # return mapping
 
         
         columns = list(doctor_ui)
         return redirect(url_for('patientForm'))
+    
     return render_template('phase2home.html',my_dict =dict())
 
 
